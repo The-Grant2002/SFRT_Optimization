@@ -57,7 +57,7 @@ To initialize env, run `poetry install`
 
 
 
-## Miscileneous files
+## Miscellaneous files
 
 * cube_optimization.py - another implementation of the MIS problem to test computation time, data storage
 * dicom_tester.py - reads dicom files, don't use
