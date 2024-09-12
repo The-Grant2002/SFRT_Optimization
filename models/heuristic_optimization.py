@@ -10,27 +10,50 @@ import pickle
 def test_sol(sol, nodes, arcs):
     '''
 
-    :param sol:
+    :param sol: dict
     :param nodes:
-    :param arcs: node list
+    :param arcs: arc list
     :return:
     '''
     valid = True
-    for i in sol:
-        for j in sol:
-            if nodes[j] in arcs[nodes[i]]:
+    for i in sol.keys():
+        for j in sol.keys():
+            if i in arcs[j]:
                 valid = False
                 break
     return valid
 
 
-def get_new_sol(init_sol, nodes, arcs, neighborhood):
+def get_new_sol(primary_sol, nodes, arcs, neighborhood):
+    solutions = []
+    init_sol = {}
+    count = 0
+    for i in nodes.keys():
+        init_sol[i] = primary_sol[count]
+        count += 1
     for i in init_sol:
-        for j in neighborhood[i]:
-            init_sol[j] = 1
+        if init_sol[i] == 1.0:
+            for j in neighborhood[i]:
+                init_sol[j] = 1.0
+                if test_sol(init_sol, nodes, arcs):
+                    solutions.append(init_sol)
+                else:
+                    init_sol[j] = -0.0
+            for j in arc_list[i]:
+                init_sol[i] = -0.0
+                init_sol[j] = 1.0
+                for k in neighborhood[j]:
+                    init_sol[k] = 1.0
+                    if test_sol(init_sol, nodes, arcs):
+                        solutions.append(init_sol)
+                    else:
+                        init_sol[k] = -0.0
+                init_sol[i] = 1.0
+                init_sol[j] = -0.0
+    return solutions
 
 
-def optimization(nodes, arcs, init_sol = None, go = True):
+def optimization(nodes, arcs, init_sol = [], go = True):
 
    options = {
         "WLSACCESSID": "9a6728f5-f620-4829-b3b7-5e01b8e667d9",
@@ -48,21 +71,24 @@ def optimization(nodes, arcs, init_sol = None, go = True):
 
    model.setObjective(quicksum(x[i] for i in nodes.keys()), GRB.MAXIMIZE)
 
-   if 5 != None:
-       sol = get_new_sol(init_sol, nodes, arcs)
+   if init_sol != []:
+       sol = {}
+       sol = get_new_sol(init_sol, nodes, arc_list, neighborhood)
        for i in nodes:
            x.Start[i] = sol[i]
+
    model.setParam("OutputFlag", 1)
-   model.Params.TimeLimit = 60
+   model.Params.TimeLimit = 5
 
    model.update()
    model.optimize()
 
    holder = []
    holder = model.getAttr("x")
+   print(holder)
 
    if go == True:
-       optimization(node_dict,arcs, holder, init_sol = holder)
+       optimization(node_dict,arcs, init_sol = holder)
 
    return holder
 
@@ -82,13 +108,18 @@ if __name__ == '__main__':
     with open("../data/node_data.pkl", 'rb') as openfile:
         node_dict = pickle.load(openfile)
 
-    node_list = {}
-    with open("../data/node_list.pkl", 'rb') as openfile:
-        node_list = pickle.load(openfile)
+    arc_list = {}
+    with open("../data/arc_list.pkl", 'rb') as openfile:
+        arc_list = pickle.load(openfile)
 
     arcs = []
     with open("../data/arc_data.pkl", 'rb') as openfile:
         arcs = pickle.load(openfile)
+
+    neighborhood = {}
+    with open("../data/neighborhood.pkl", 'rb') as openfile:
+        neighborhood = pickle.load(openfile)
+
 
     node_index = optimization(node_dict,arcs)
 

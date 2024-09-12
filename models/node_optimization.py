@@ -7,6 +7,12 @@ import math
 import json
 
 def optimization(nodes, arcs):
+   options = {
+        "WLSACCESSID": "9a6728rf5-f620-4829-b3b7-5e01b8e667d9",
+        "WLSSECRET": "6f73eab7-cea6-4f6f-a167-510fd4aa9aa9",
+        "LICENSEID": 2544834,
+   }
+   env = Env(params=options)
    model = Model("optimal")  # create model
 
    x = model.addVars(nodes, vtype=GRB.BINARY)

@@ -53,7 +53,7 @@ def get_x_boundary(points):
 
     return xmin, xmax
 
-def get_x_values(xmin,xmax, granularity):
+def get_x_values(xmin,xmax, granularity, init):
     '''
     Takes a domain and returns a list of all x values within that domain with a given granularity
     :param xmin: int: lowest x value
@@ -62,7 +62,7 @@ def get_x_values(xmin,xmax, granularity):
     :return: list of all points between max and min
     '''
     x = []
-    i = math.floor(xmin)
+    i = init
     while i <= xmax:
         if i >= xmin and i <= xmax:
             x.append(i)
@@ -100,7 +100,7 @@ def get_y_bounds(x, points):
         y.append(get_line_intercept(i[0], i[1], x))
     return y
 
-def get_y_values(ymin,ymax, granularity):
+def get_y_values(ymin,ymax, granularity, init):
     '''
     Takes a range and returns a list of all y values within that range with a given granularity
     :param ymin: int: lowest y value
@@ -110,7 +110,7 @@ def get_y_values(ymin,ymax, granularity):
     Yes, this is the same as get_x_values()
     '''
     y = []
-    i = math.floor(ymin)
+    i = init
     while i <= ymax:
         if i >= ymin and i <= ymax:
             y.append(i)
@@ -146,8 +146,9 @@ def get_candidate_points(points, test_radius = 10, test_boundary_num = 17, granu
     #get the x bounds
     xmin, xmax = get_x_boundary(points)
 
+    init_val = -1000
     #get x values
-    x_list = get_x_values(xmin, xmax, granularity)
+    x_list = get_x_values(xmin, xmax, granularity, init_val)
 
     #get valid y range
     y_bounds = []
@@ -160,7 +161,7 @@ def get_candidate_points(points, test_radius = 10, test_boundary_num = 17, granu
         if len(y_bounds[i]) == 2: #if shape at x value is convex combination of points (only 2 points for an x)
             ymin = min(y_bounds[i])
             ymax = max(y_bounds[i])
-            y_list.append(get_y_values(ymin, ymax, granularity))   ## Get y values for each x
+            y_list.append(get_y_values(ymin, ymax, granularity, init_val))   ## Get y values for each x
         elif len(y_bounds[i]) == 1: #if there is only a single point for an x, just add that value
             y_list.append(y_bounds[i])
         elif len(y_bounds[i]) % 2 == 0 and not(len(y_bounds[i]) == 2): #For an even number of points with convexity, assume that there is a hole
@@ -169,7 +170,7 @@ def get_candidate_points(points, test_radius = 10, test_boundary_num = 17, granu
             y_bounds[i] = sorted(y_bounds[i])
             for j in range(len(y_bounds[i])):
                 if j % 2 == 0:
-                    y_subset.append(get_y_values(min(y_bounds[i][j], y_bounds[i][j+1]), max(y_bounds[i][j], y_bounds[i][j+1]), granularity))
+                    y_subset.append(get_y_values(min(y_bounds[i][j], y_bounds[i][j+1]), max(y_bounds[i][j], y_bounds[i][j+1]), granularity, init_val))
 
             for j in range(len(y_subset)):
                 y_holder.extend(y_subset[j])
@@ -195,7 +196,7 @@ def get_candidate_points(points, test_radius = 10, test_boundary_num = 17, granu
             print(y_bounds[i])
             for j in range(len(y_bounds[i])):
                 if j % 2 == 0 and y_bounds[i][j] != y_bounds[i][-1]:
-                    y_subset.append(get_y_values(min(y_bounds[i][j], y_bounds[i][j+1]), max(y_bounds[i][j], y_bounds[i][j+1]), granularity))
+                    y_subset.append(get_y_values(min(y_bounds[i][j], y_bounds[i][j+1]), max(y_bounds[i][j], y_bounds[i][j+1]), granularity, init_val))
             for j in range(len(y_subset)):
                 y_holder.extend(y_subset[j])
             y_list.append(y_holder)

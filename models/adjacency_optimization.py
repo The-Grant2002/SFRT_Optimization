@@ -17,6 +17,7 @@ def optimization(nodes, adjacency):
    model.Params.TimeLimit = 21600
    #model.Params.TimeLimit = 160
    model.update()
+   model.write("adj.mps")
    model.optimize()
 
    #if model.status == GRB.Status.OPTIMAL:

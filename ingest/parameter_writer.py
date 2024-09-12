@@ -50,7 +50,7 @@ def create_arcs(nodes, min_dist = 30):
     arcs = []
     node_arcs = {}
     matrix = []
-
+    neighborhood = {key: [] for key in nodes}
     for i in nodes.keys():
         count = 0
 
@@ -64,6 +64,9 @@ def create_arcs(nodes, min_dist = 30):
                 holder.append(j)
                 matrix_holder.append(1)
                 count +=1
+            elif min_dist < math.dist(nodes[i], nodes[j]) <= min_dist + 10 and i != j:
+                neighborhood[i].append(j)
+                matrix_holder.append(0)
             else:
                 matrix_holder.append(0)
         node_arcs[i] = holder
@@ -71,7 +74,7 @@ def create_arcs(nodes, min_dist = 30):
         for k in range(100):
             if i == str(round((len(nodes)*k)/100)):
                 print(str(k) + " out of 100 done")
-    return arcs, node_arcs, matrix
+    return arcs, node_arcs, matrix, neighborhood
 
 
 if __name__ == '__main__':
@@ -85,7 +88,7 @@ if __name__ == '__main__':
 
     print("file read")
     node_dict = {}
-
+    neighborhood = {}
     index = 0
     for i in range(len(node_list)):
         for j in range(len(node_list[i])):
@@ -94,7 +97,7 @@ if __name__ == '__main__':
 
     print("nodes loaded")
 
-    arcs, node_arcs, matrix = create_arcs(node_dict)
+    arcs, node_arcs, matrix, neighborhood = create_arcs(node_dict)
 
     #arcs = create_edges(node_list, node_dict)
 
@@ -115,3 +118,6 @@ if __name__ == '__main__':
 
     with open('../data/arc_list.pkl', 'wb') as outfile:
         pickle.dump(node_arcs, outfile)
+
+    with open('../data/neighborhood.pkl', 'wb') as outfile:
+        pickle.dump(neighborhood, outfile)

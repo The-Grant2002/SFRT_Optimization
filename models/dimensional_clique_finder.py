@@ -18,7 +18,7 @@ def optimization(nodes, arcs):
     #    for j in nodes:
     #        p[i,j] = 0
 
-    model.addConstrs(sum((x[i,k]-x[j,k])**2 for k in nodes) == 1 for i,j in arcs)
+    model.addConstrs(sum((x[i,k]-x[j,k])**2 for k in nodes) == 2 for i,j in arcs)
     #model.addGenConstrexp(x[i,k]-x[j,k])**2 for k in nodes == 1 for i,j in arcs
 
     model.addConstrs(x[i,j] <= 1 for i in nodes for j in nodes)
@@ -65,7 +65,7 @@ with open('../data/clique_test.pkl', 'wb') as outfile:
 
 for i in range(len(test_sol)):
     print(test_sol[i])
-print(len(test_sol))
+
 
 '''
 with open('../data/dimensional_cliques.pkl', 'wb') as outfile:
