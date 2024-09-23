@@ -15,6 +15,7 @@ def optimization(nodes, adjacency):
         """ Run optimization with a time limit. """
 
         result = {'success': False, 'message': 'Optimization not completed in time.'}
+        result_lock = threading.Lock()
 
         def run_optimization():
             nonlocal result
@@ -25,16 +26,21 @@ def optimization(nodes, adjacency):
                     raise OptimizationTimeoutException()
             try:
                 res = minimize(func, x0, bounds=bounds, constraints=constraints, method=method, callback=callback)
-                result.update({'success': res.success, 'message': res.message, 'x': res.x, 'fun': res.fun})
+                with result_lock:
+                    result.update({'success': res.success, 'message': res.message, 'x': res.x, 'fun': res.fun})
             except OptimizationTimeoutException:
-                pass
+                with result_lock:
+                    result.update({'success': False, 'message': 'Time limit exceeded'})
+
         thread = threading.Thread(target=run_optimization)
         thread.start()
         thread.join(timeout=time_limit)
 
         if thread.is_alive():
             print('time limit exceeded. ending optimization')
+
             result.update({'success': False, 'message': 'Time limit exceeded'})
+
         return result
 
 
@@ -44,11 +50,12 @@ def optimization(nodes, adjacency):
     x0 = [0]*len(nodes)
     con = lambda x: x**2 - x
     nlc = NonlinearConstraint(con,0,0)
-    time_limit = 600
+    time_limit = 10
 
     result = optimize_with_timeout(objective, x0, constraints=nlc, time_limit=time_limit)
 
     print(result)
+
 def plot(cube, size):
 
    fig = plt.figure()

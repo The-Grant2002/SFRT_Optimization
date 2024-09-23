@@ -51,6 +51,7 @@ def create_arcs(nodes, min_dist = 30):
     node_arcs = {}
     matrix = []
     neighborhood = {key: [] for key in nodes}
+    num_arcs = 0
     for i in nodes.keys():
         count = 0
 
@@ -64,6 +65,7 @@ def create_arcs(nodes, min_dist = 30):
                 holder.append(j)
                 matrix_holder.append(1)
                 count +=1
+                num_arcs +=1
             elif min_dist < math.dist(nodes[i], nodes[j]) <= min_dist + 10 and i != j:
                 neighborhood[i].append(j)
                 matrix_holder.append(0)
@@ -74,7 +76,7 @@ def create_arcs(nodes, min_dist = 30):
         for k in range(100):
             if i == str(round((len(nodes)*k)/100)):
                 print(str(k) + " out of 100 done")
-    return arcs, node_arcs, matrix, neighborhood
+    return arcs, node_arcs, matrix, neighborhood, num_arcs
 
 
 if __name__ == '__main__':
@@ -97,11 +99,12 @@ if __name__ == '__main__':
 
     print("nodes loaded")
 
-    arcs, node_arcs, matrix, neighborhood = create_arcs(node_dict)
+    arcs, node_arcs, matrix, neighborhood, num_arcs = create_arcs(node_dict)
 
     #arcs = create_edges(node_list, node_dict)
 
     print("arcs done")
+    print("created "+ str(num_arcs) + " arcs")
 
 
 
