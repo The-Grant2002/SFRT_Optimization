@@ -12,7 +12,7 @@ def optimization(nodes, arcs):
         "WLSSECRET": "6f73eab7-cea6-4f6f-a167-510fd4aa9aa9",
         "LICENSEID": 2544834,
    }
-   env = Env(params=options)
+   #env = Env(params=options)
    model = Model("optimal")  # create model
 
    x = model.addVars(nodes, vtype=GRB.BINARY)

@@ -20,8 +20,8 @@ import json
 #supposedly speeds up matplotlib
 mplstyle.use("fast")
 
-#ds = pydicom.dcmread(r"C:\Users\Grant\Downloads\Anonymized grid\Grid 2 anonymized\2024-07__Studies\Grid2_Grid2_RTst_2024-07-29_145646_._ARIA.RadOnc.Structure.Sets_n1__00000\2.16.840.1.114362.1.12306304.27066498827.682660245.301.301.dcm")
-ds = pydicom.dcmread(r"C:\Users\Grant\Downloads\SampleData\SampleData\RS\RS.2.16.840.1.114362.1.12306304.26355686295.676003074.403.3455.dcm")
+ds = pydicom.dcmread(r"C:\Users\Grant\Downloads\Anonymized grid\Grid 2 anonymized\2024-07__Studies\Grid2_Grid2_RTst_2024-07-29_145646_._ARIA.RadOnc.Structure.Sets_n1__00000\2.16.840.1.114362.1.12306304.27066498827.682660245.301.301.dcm")
+#ds = pydicom.dcmread(r"C:\Users\Grant\Downloads\SampleData\SampleData\RS\RS.2.16.840.1.114362.1.12306304.26355686295.676003074.403.3455.dcm")
 contours = ds.ROIContourSequence
 
 structures = {}
@@ -33,7 +33,7 @@ print(structures.values())
 
 
 points = []
-k = 12#39#12  #ROI 12 = ptv_grid 19 = ptv spheres, 23 = PTV VMAT, 27 GRIDptv_TM_RESEARCH
+k = 39#12  #ROI 12 = ptv_grid 19 = ptv spheres, 23 = PTV VMAT, 27 GRIDptv_TM_RESEARCH
 i = 0
 j = 0 #slice
 
