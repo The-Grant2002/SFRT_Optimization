@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.style as mplstyle
-from triangle_grid_placement import get_candidate_points
+from relative_grid_placement import get_candidate_points
 from grid_placement import plot2d
 import json
 
@@ -33,7 +33,7 @@ print(structures.values())
 
 
 points = []
-k = 39#12  #ROI 12 = ptv_grid 19 = ptv spheres, 23 = PTV VMAT, 27 GRIDptv_TM_RESEARCH
+k =  39#12  #ROI 12 = ptv_grid 19 = ptv spheres, 23 = PTV VMAT, 27 GRIDptv_TM_RESEARCH
 i = 0
 j = 0 #slice
 

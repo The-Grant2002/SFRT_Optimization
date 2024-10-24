@@ -11,8 +11,8 @@ import dicom_csv
 from rt_utils import RTStructBuilder
 from skrt import Image
 '''
-ds = pydicom.dcmread(r"C:\Users\grant\Downloads\SampleData\SampleData\CT\CT.2.16.840.1.114362.1.12306304.26355686295.676003073.823.3428.dcm")
-#ds = pydicom.dcmread(r"C:\Users\grant\Downloads\SampleData\SampleData\CT\RS.2.16.840.1.114362.1.12306304.26355686295.676003074.403.3455.dcm")
+#ds = pydicom.dcmread(r"C:\Users\grant\Downloads\SampleData\SampleData\CT\CT.2.16.840.1.114362.1.12306304.26355686295.676003073.823.3428.dcm")
+ds = pydicom.dcmread(r"C:\Users\grant\Downloads\SampleData\SampleData\CT\RS.2.16.840.1.114362.1.12306304.26355686295.676003074.403.3455.dcm")
 print(ds)
 exit()
 df = r"C:\Users\grant\Downloads\SampleData\SampleData\CT"
